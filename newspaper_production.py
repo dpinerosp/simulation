@@ -3,7 +3,7 @@
 import random
 import matplotlib.pyplot as plt
 
-PRECIO = 700
+PRECIO = 800
 COSTO = 300
 MEDIA = 50000
 DESVIACION = 12500
