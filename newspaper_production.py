@@ -19,7 +19,7 @@ def ganancia(P, D, precio, costo):
         return (D * precio - P * costo)
 
 def demanda(media, desviacion):
-    """ Calcula la demanda siguiendo una distribución normal para la media y la desviación indicada como argumento. """
+    """ Calcula la demanda siguiendo una distribución normal para la media y la desviación indicadas como argumento. """
     return random.gauss(media, desviacion)
     
 def simulacion_n(P, n,  media, desviacion, precio, costo):
@@ -32,7 +32,7 @@ def simulacion_n(P, n,  media, desviacion, precio, costo):
     return sum(G) / len(G)
 
 def simulacion_total(P_min, P_max, n, media, desviacion, precio, costo):
-    """ Retorna una diccionarion que relaciona la ganancia para cada nivel de produccion. """
+    """ Retorna una diccionario que relaciona la ganancia para cada nivel de produccion. """
     G = {}
     for i in range(P_min, P_max + 1):
         # Genera una simulación para n días guarda el resultado como una par key:value en el diccionario G
