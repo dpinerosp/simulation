@@ -44,7 +44,6 @@ def simulacion_total(P_min, P_max, n, media, desviacion, precio, costo, precio_e
 def generar_grafica(datos_P, datos_G, p, g, nombre):
     """ Genera la gráfica de los niveles de producción y las ganancias para cada nivel de producción. """
     fg, ax = plt.subplots()
-#    ax.plot(datos_P, datos_G, 'bo', p, g, 'ro')
     ax.plot(datos_P, datos_G, 'bo', label='Datos')
     ax.plot(p, g, 'ro', label='Máximo')
     ax.legend()
