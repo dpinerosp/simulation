@@ -4,6 +4,7 @@ import random
 import matplotlib.pyplot as plt
 
 PRECIO = 800
+PRECIO_EXCEDENTES = 50
 COSTO = 300
 MEDIA = 50000
 DESVIACION = 12500
@@ -11,12 +12,12 @@ N = 365
 P_MINIMO = 35000
 P_MAXIMO = 65000
 
-def ganancia(P, D, precio, costo):
+def ganancia(P, D, precio, costo, precio_excedentes=0):
     """ Calcula la ganancia de acuerdo al las unidades producidas y las unidades vendidas. """
     if D >= P:
         return (P * precio - P * costo)
     else:
-        return (D * precio - P * costo)
+        return (D * precio - P * costo + precio_excedentes*(P-D))
 
 def demanda(media, desviacion):
     """ Calcula la demanda siguiendo una distribución normal para la media y la desviación indicadas como argumento. """
