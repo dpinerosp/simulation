@@ -1,65 +1,67 @@
 #!/usr/bin/env python
 
-import random
 import matplotlib.pyplot as plt
+import random
+import operator
 
-PRECIO = 800
-PRECIO_EXCEDENTES = 50
-COSTO = 300
-MEDIA = 50000
-DESVIACION = 12500
-N = 365
-P_MINIMO = 35000
-P_MAXIMO = 65000
+PRECIO = 800     # Precio por unidad de periódico vendido
+PRECIO_EXCEDENTE = 50   # Precio de venta de los periódicos excedente
+COSTO = 300      # Costo de producir una unidad de periódico
+MEDIA = 50000    # Demanda promedio
+DESVIACION = 12500 # Desviación de la demanda
+N = 50          # Días a simular
+P_MINIMO = 35000 # Límite inferior de la producción a simular
+P_MAXIMO = 65000 # Límite superior de la producción a simular
 
 def ganancia(P, D, precio, costo, precio_excedentes=0):
     """ Calcula la ganancia de acuerdo al las unidades producidas y las unidades vendidas. """
     if D >= P:
-        return (P * precio - P * costo)
+        return P * (precio - costo)
     else:
         return (D * precio - P * costo + precio_excedentes*(P-D))
 
-def demanda(media, desviacion):
+def demanda(media, desviacion, n):
     """ Calcula la demanda siguiendo una distribución normal para la media y la desviación indicadas como argumento. """
-    return random.gauss(media, desviacion)
+    random.seed(0)
+#    D = np.random.normal(media, desviacion, n)
+    D = [random.gauss(media, desviacion) for i in range(n)]
     
-def simulacion_n(P, n,  media, desviacion, precio, costo):
+    return D
+    
+def simulacion_n(P, D, n,  media, desviacion, precio, costo, precio_excedente=0):
     """ Retorna el promedio de la ganancia para la simulación de n días. """
-    G = []
-    for i in range(1, n + 1):
-        D = demanda(media, desviacion)
-        G.append(ganancia(P, D, precio, costo))
-
+    G = [ganancia(P, i, precio, costo, precio_excedente) for i in D]
     return sum(G) / len(G)
 
-def simulacion_total(P_min, P_max, n, media, desviacion, precio, costo):
+def simulacion_total(P_min, P_max, n, media, desviacion, precio, costo, precio_excedente=0):
     """ Retorna una diccionario que relaciona la ganancia para cada nivel de produccion. """
+    D = demanda(media, desviacion, n)
     G = {}
     for i in range(P_min, P_max + 1):
         # Genera una simulación para n días guarda el resultado como una par key:value en el diccionario G
-        G[i] = simulacion_n(i, n, media, desviacion, precio, costo)
+        G[i] = simulacion_n(i, D, n, media, desviacion, precio, costo, precio_excedente)
     return G
 
-if __name__ == "__main__":
-    P_G = simulacion_total(P_MINIMO, P_MAXIMO, N, MEDIA, DESVIACION, PRECIO, COSTO)
-    datos_p = []
-    datos_g = []
-    p = 0    # Almacena una lista con todos los niveles de producción usados para la simulación
-    g = 0    # Almacena una lista con todas las ganancias generadas para cada nivel de producción.
-    
-    for produccion, ganancias in P_G.items():
-        datos_p.append(produccion)
-        datos_g.append(ganancias)
-        if ganancias > g:    # Busca ganancia máxima
-            g = ganancias    # Guarda la ganancia máxima
-            p = produccion   # Guarda el nivel de producción que genera la ganancia máxima
-    print('Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p, g))
-
-    # Configuración y generación de la gráfica.
+def generar_grafica(datos_P, datos_G, nombre):
+    """ Genera la gráfica de los niveles de producción y las ganancias para cada nivel de producción. """
     fig, ax = plt.subplots()
-    ax.plot(datos_p, datos_g, 'bo')
-    ax.set(xlabel='Periódicos a producir', ylabel='Ganancias (COP)', title='Resultados de la simulación')
+    ax.plot(datos_P, datos_G, 'bo')
+    ax.set(xlabel='Periódicos a producir', ylabel='Ganancias (COP)', title='Resultados: ' + nombre)
     ax.grid()
-    fig.savefig("simulacion.png")
+    fig.savefig(nombre + ".png")
     plt.show()
 
+
+if __name__ == "__main__":
+    P_G_a = simulacion_total(P_MINIMO, P_MAXIMO, N, MEDIA, DESVIACION, PRECIO, COSTO)  # Simulación caso a
+    P_G_b = simulacion_total(P_MINIMO, P_MAXIMO, N, MEDIA, DESVIACION, PRECIO, COSTO, PRECIO_EXCEDENTE)    # Simulación caso b
+
+    # Resultados simulación del caso a
+    p_a, g_a  = max(P_G_a.items(), key=operator.itemgetter(1))
+    print('Caso a: Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p_a, g_a))
+    generar_grafica(list(P_G_a.keys()), list(P_G_a.values()), 'simulacion_a')
+
+    # Resultados simulación del caso b
+    p_b, g_b  = max(P_G_b.items(), key=operator.itemgetter(1))
+    print('Caso b: Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p_b, g_b))
+    generar_grafica(list(P_G_b.keys()), list(P_G_b.values()), 'simulacion_b')
