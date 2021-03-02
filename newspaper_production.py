@@ -9,7 +9,7 @@ PRECIO_EXCEDENTE = 50   # Precio de venta de los periódicos excedente
 COSTO = 300        # Costo de producir una unidad de periódico
 MEDIA = 50000      # Demanda promedio
 DESVIACION = 12500 # Desviación de la demanda
-N = 50      m      # Días a simular
+N = 50             # Días a simular
 P_MINIMO = 1       # Límite inferior de la producción a simular
 P_MAXIMO = 100000  # Límite superior de la producción a simular
 
