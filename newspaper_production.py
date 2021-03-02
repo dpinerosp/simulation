@@ -41,10 +41,13 @@ def simulacion_total(P_min, P_max, n, media, desviacion, precio, costo, precio_e
         G[i] = simulacion_n(i, D, n, media, desviacion, precio, costo, precio_excedente)
     return G
 
-def generar_grafica(datos_P, datos_G, nombre):
+def generar_grafica(datos_P, datos_G, p, g, nombre):
     """ Genera la gráfica de los niveles de producción y las ganancias para cada nivel de producción. """
     fg, ax = plt.subplots()
-    ax.plot(datos_P, datos_G, 'bo')
+#    ax.plot(datos_P, datos_G, 'bo', p, g, 'ro')
+    ax.plot(datos_P, datos_G, 'bo', label='Datos')
+    ax.plot(p, g, 'ro', label='Máximo')
+    ax.legend()
     ax.set(xlabel='Periódicos a producir', ylabel='Ganancias (COP)', title='Resultados: ' + nombre)
     ax.grid()
     fg.savefig(nombre + ".png")
@@ -56,12 +59,12 @@ if __name__ == "__main__":
     # Resultados simulación del caso a
     p_a, g_a  = max(P_G_a.items(), key=operator.itemgetter(1))
     print('Caso a: Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p_a, g_a))
-    grafica_a = generar_grafica(list(P_G_a.keys()), list(P_G_a.values()), 'simulacion_a')
+    grafica_a = generar_grafica(list(P_G_a.keys()), list(P_G_a.values()),p_a, g_a, 'simulacion_a')
 
     # Resultados simulación del caso b
     p_b, g_b  = max(P_G_b.items(), key=operator.itemgetter(1))
     print('Caso b: Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p_b, g_b))
-    grafica_b = generar_grafica(list(P_G_b.keys()), list(P_G_b.values()), 'simulacion_b')
+    grafica_b = generar_grafica(list(P_G_b.keys()), list(P_G_b.values()), p_b, g_b, 'simulacion_b')
 
     # Mostrar las gráficas
     plt.show()
