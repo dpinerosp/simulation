@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import random
 import operator
 
-PRECIO = 800     # Precio por unidad de periódico vendido
+PRECIO = 800       # Precio por unidad de periódico vendido
 PRECIO_EXCEDENTE = 50   # Precio de venta de los periódicos excedente
-COSTO = 300      # Costo de producir una unidad de periódico
-MEDIA = 50000    # Demanda promedio
+COSTO = 300        # Costo de producir una unidad de periódico
+MEDIA = 50000      # Demanda promedio
 DESVIACION = 12500 # Desviación de la demanda
-N = 50          # Días a simular
-P_MINIMO = 35000 # Límite inferior de la producción a simular
-P_MAXIMO = 65000 # Límite superior de la producción a simular
+N = 50      m      # Días a simular
+P_MINIMO = 1       # Límite inferior de la producción a simular
+P_MAXIMO = 100000  # Límite superior de la producción a simular
 
 def ganancia(P, D, precio, costo, precio_excedentes=0):
     """ Calcula la ganancia de acuerdo al las unidades producidas y las unidades vendidas. """
@@ -23,7 +23,6 @@ def ganancia(P, D, precio, costo, precio_excedentes=0):
 def demanda(media, desviacion, n):
     """ Calcula la demanda siguiendo una distribución normal para la media y la desviación indicadas como argumento. """
     random.seed(0)
-#    D = np.random.normal(media, desviacion, n)
     D = [random.gauss(media, desviacion) for i in range(n)]
     
     return D
