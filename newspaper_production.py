@@ -64,6 +64,6 @@ if __name__ == "__main__":
     print('Caso b: Se deberá producir {} unidades de periódicos generando una ganancia de {}.'.format(p_b, g_b))
     grafica_b = generar_grafica(list(P_G_b.keys()), list(P_G_b.values()), 'simulacion_b')
 
-#    fg.savefig("resultados_simulacion.png")
+    # Mostrar las gráficas
     plt.show()
     
